@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Bollywood Movies</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 1000px;
+            margin: 100px auto 50px;
+            padding: 30px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .admin-title {
+            font-size: 2rem;
+            color: var(--text);
+        }
+        
+        .back-btn {
+            background: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #ff0a16;
+            transform: translateY(-2px);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text);
+        }
+        
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 10px rgba(229, 9, 20, 0.3);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        
+        .submit-btn:hover {
+            background: #ff0a16;
+            transform: translateY(-2px);
+        }
+        
+        .cancel-btn {
+            background: var(--card-bg);
+            color: var(--text);
+            border: 1px solid #444;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .cancel-btn:hover {
+            background: #333;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+        
+        .error {
+            background: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        
+        .movie-list {
+            margin-top: 40px;
+        }
+        
+        .movie-list h3 {
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+        
+        .movie-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .movie-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .movie-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .edit-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .edit-btn:hover {
+            background: #2980b9;
+        }
+        
+        .delete-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+        
+        .logout-btn {
+            background: var(--card-bg);
+            color: var(--text);
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-left: 10px;
+        }
+        
+        .logout-btn:hover {
+            background: var(--primary);
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 8px;
+        }
+
+        /* Upload Styles */
+        .upload-container {
+            border: 2px dashed #444;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .upload-container:hover {
+            border-color: var(--primary);
+            background: rgba(229, 9, 20, 0.05);
+        }
+
+        .upload-container.dragover {
+            border-color: var(--primary);
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 2rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .upload-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-btn:hover {
+            background: #ff0a16;
+        }
+
+        .preview-container {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            max-height: 300px;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .upload-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .option-btn {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #444;
+            background: var(--card-bg);
+            color: var(--text);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-btn.active {
+            border-color: var(--primary);
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        .url-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-film"></i>
+                    <h1>Bollywood Hub - Admin Panel</h1>
+                </div>
+                <div>
+                    <a href="index.html" class="admin-btn">
+                        <i class="fas fa-home"></i> Back to Site
+                    </a>
+                    <a href="admin-login.html" class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Admin Panel -->
+    <div class="container">
+        <div class="admin-container">
+            <div class="admin-header">
+                <h2 class="admin-title">Manage Movies</h2>
+                <a href="index.html" class="back-btn">
+                    <i class="fas fa-arrow-left"></i> Back to Movies
+                </a>
+            </div>
+            
+            <div id="message" class="message"></div>
+            
+            <!-- Add/Edit Movie Form -->
+            <div class="form-section">
+                <h3 id="formTitle">Add New Movie</h3>
+                <form id="movieForm">
+                    <input type="hidden" id="movieId">
+                    <div class="form-group">
+                        <label for="title">Movie Title</label>
+                        <input type="text" id="title" required placeholder="Enter movie title">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="poster">Movie Poster</label>
+                        
+                        <!-- Upload Options -->
+                        <div class="upload-options">
+                            <button type="button" class="option-btn active" id="uploadOption">Upload Image</button>
+                            <button type="button" class="option-btn" id="urlOption">Use URL</button>
+                        </div>
+
+                        <!-- Upload Container -->
+                        <div class="upload-container" id="uploadContainer">
+                            <div class="upload-icon">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                            </div>
+                            <div class="upload-text">
+                                Click to upload or drag and drop<br>
+                                <small>PNG, JPG, GIF up to 5MB</small>
+                            </div>
+                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                            <button type="button" class="upload-btn" id="browseBtn">Browse Files</button>
+                            
+                            <!-- Preview -->
+                            <div class="preview-container">
+                                <img id="previewImage" class="preview-image" alt="Preview">
+                            </div>
+                        </div>
+
+                        <!-- URL Input -->
+                        <div class="url-input" id="urlInputContainer">
+                            <input type="url" id="posterUrl" placeholder="Enter poster image URL">
+                            <button type="button" class="upload-btn" id="loadUrlBtn" style="margin-top: 10px; width: 100%;">Load from URL</button>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="watchLink">Watch URL</label>
+                        <input type="url" id="watchLink" required placeholder="Enter watch link URL">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="year">Release Year</label>
+                        <input type="number" id="year" required placeholder="Enter release year" min="1950" max="2023">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="rating">Rating (0-10)</label>
+                        <input type="number" id="rating" required placeholder="Enter rating" min="0" max="10" step="0.1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="genre">Genre (comma separated)</label>
+                        <input type="text" id="genre" required placeholder="e.g. Action, Drama, Romance">
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="submit-btn" id="submitBtn">Add Movie</button>
+                        <button type="button" class="cancel-btn" id="cancelBtn" style="display: none;">Cancel</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Movie List -->
+            <div class="movie-list">
+                <h3>Current Movies (Total: <span id="movieCount">0</span>)</h3>
+                <div id="movieListContainer">
+                    <!-- Movie list will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+  </html>
